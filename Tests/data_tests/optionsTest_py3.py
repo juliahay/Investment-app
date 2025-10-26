@@ -1,3 +1,4 @@
+#! /usr/bin/python3
 from polygon import RESTClient
 import pandas as pd
 from pandas import json_normalize 
