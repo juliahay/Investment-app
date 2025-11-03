@@ -8,6 +8,7 @@ import json
 
 API_KEY = 'bsmdfKwVkC45Nke9ayRlSq7bpdRR95yJ'
 client = RESTClient(api_key=API_KEY)
+client = RESTClient(api_key=API_KEY, trace=True, verbose=True)
 #stocks_client = polygon.StocksClient(API_KEY)
 
 #ticker = 'AAPL'
@@ -15,10 +16,12 @@ client = RESTClient(api_key=API_KEY)
 #url = ''
 #data_type = ''
 
-date = '2025-10-24'
+date = '2025-10-28'
 
+#echo curl l -X GET "https://api.massive.com/v3/reference/tickers?market=stocks&active=true&order=asc&limit=100&sort=ticker&apiKey=API_KEY"
 tickers = []
-for t in client.list_tickers(market="stocks", active=True, limit=1000):
+for t in client.list_tickers(market="crypto", date=date, limit=1000):
+    print (t)
     tickers.append(t)
 print(tickers)
 
