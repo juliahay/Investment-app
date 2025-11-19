@@ -58,6 +58,8 @@ while url is not None:
     #print(final_df)
     counter += 1
 
+
+final_df = final_df["ticker"]
 final_df.index += 1
 print(final_df)
 
