@@ -30,6 +30,9 @@ print(df)
 
 final_df = pd.DataFrame()
 url = "https://api.massive.com/v2/snapshot/locale/us/markets/stocks/tickers?apiKey=UBHvDYupWopjarOGExaqioHxZ0eq1h1V"
+r = requests.get(url)
+data = r.json()
+full_df = pd.DataFrame(data["tickers"])
 
 """
 counter = 0
@@ -52,9 +55,21 @@ while url is not None:
     #print(final_df)
     counter += 1
 """
-r = requests.get(url)
-data = r.json()
-final_df = pd.DataFrame(data["tickers"])
+print("Grabbing ticker data...")
+
+for row in full_df.itertuples():
+    ticker = row.ticker
+    url = f'https://api.massive.com/v3/reference/tickers/{ticker}?apiKey={API_KEY}'
+    r = requests.get(url)
+    data = r.json()
+    if 'results' in data:
+        ticker_df = pd.DataFrame([data["results"]])
+        if 'market_cap' in ticker_df.columns and ticker_df["market_cap"][0] >= 1e11:
+            final_df = pd.concat([final_df, full_df.loc[[row.Index]]], ignore_index=True)
+    
+
+print("Processing nested columns...")
+
 for col in final_df.select_dtypes(include=['object']).columns:
     if not isinstance(final_df[col][0], str):
         for key, value in final_df[col][0].items():
@@ -62,11 +77,9 @@ for col in final_df.select_dtypes(include=['object']).columns:
             final_df[title] = final_df[col].apply(lambda x: x[key])
         final_df = final_df.drop(columns=[col])
         
-final_df["marketCap"] = final_df["day_c"] * final_df["day_v"]
 #final_df = final_df[final_df['marketCap'] >= 1e11]
 final_df.index += 1
 print(final_df)
-
 
 html_full = final_df.to_html()
 text_file = open("data.html", "w")
