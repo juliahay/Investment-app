@@ -1,3 +1,5 @@
+#! /usr/bin/python3
+
 from massive import RESTClient
 import pandas as pd
 from pandas import json_normalize 
@@ -14,7 +16,8 @@ ticker = 'AAPL'
 #url = ''
 #data_type = ''
 
-date = '2025-11-18'
+date = '2025-11-26'
+market_cap_threshold = '1e11'
 
 """ 
 df = pd.DataFrame(client.list_options_contracts(
@@ -86,4 +89,4 @@ text_file = open("data.html", "w")
 text_file.write(html_full)
 text_file.close()
 
-webbrowser.open("file:///Tests/data_tests/data.html")
+webbrowser.open("file://home/ec2-user/git/Investment-app/Tests/data_tests/data.html")
